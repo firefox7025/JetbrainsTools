@@ -1,5 +1,16 @@
 version: '2'
 services:
+  youtrack:
+    build: youtrack/
+    volumes:
+      - YouTrackLib:/var/lib/youtrack
+      - YouTrackLog:/var/log/youtrack
+      - YouTrackLocal:/usr/local/youtrack/conf
+      - YouTrackTmp:/tmp
+    links:
+      - postgres
+    ports:
+      - 8110:8080
   teamcity:
     build: teamcity/
     volumes:
@@ -9,16 +20,63 @@ services:
       - 8111:8111
     links:
       - postgres
+  hub:
+    build: hub/
+    ports:
+      - 8112:8080
+    links:
+      - teamcity
+      - youtrack
+    volumes:
+      - HubDataDir:/opt/hub/hub-ring-bundle-2017.3.6757/data/
+      - HubBackupDir:/opt/hub/hub-ring-bundle-2017.3.6757/backups/
+      - HubLogsLocation:/opt/hub/hub-ring-bundle-2017.3.6757/logs/
+      - HubTempLocation:/opt/hub/hub-ring-bundle-2017.3.6757/temp/
+  upsource:
+    image: jetbrains/upsource:2017.2.2197
+    ports:
+      - 8113:8080
+    volumes:
+      - upsourceData:/opt/upsource/data
+      - upsourceconf:/opt/upsource/conf
+      - upsourceLogs:/opt/upsource/logs
+      - upsourceBackups:/opt/upsource/backups
+    links:
+      - hub
   postgres:
     image: postgres:10-alpine
     volumes:
       - pgdata:/var/lib/postgresql/data
 
 volumes:
+  upsourceData:
+    external: true
+  upsourceconf:
+    external: true
+  upsourceLogs:
+    external: true
+  upsourceBackups:
+    external: true
+  HubDataDir:
+    external: true
+  HubBackupDir:
+    external: true
+  HubLogsLocation:
+    external: true
+  HubTempLocation:
+    external: true
   TeamCityDataDir:
     external: true
   TeamCityLogsDir:
     external: true
   pgdata:
+    external: true
+  YouTrackLib:
+    external: true
+  YouTrackLog:
+    external: true
+  YouTrackLocal:
+    external: true
+  YouTrackTmp:
     external: true
   
