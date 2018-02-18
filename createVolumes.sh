@@ -10,3 +10,7 @@ docker volume create --name=upsourceBackups
 docker volume create --name=upsourceData
 docker volume create --name=upsourceconf
 docker volume create --name=upsourceLogs
+docker volume create --name=YouTrackLocal
+docker volume create --name=YouTrackLib
+docker volume create --name=YouTrackLog
+docker volume create --name=YouTrackTmp
