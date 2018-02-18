@@ -3,10 +3,10 @@ services:
   youtrack:
     build: youtrack/
     volumes:
-      - /usr/local/youtrack/data/
-      - /usr/local/youtrack/backups/ 
-      - /usr/local/youtrack/logs/ 
-      - /usr/local/youtrack/temp/ 
+      - /opt/youtrack/data/:/usr/local/youtrack/data/
+      - /opt/youtrack/backups/:/usr/local/youtrack/backups/ 
+      - /opt/youtrack/logs/:/usr/local/youtrack/logs/ 
+      - /opt/youtrack/temp/:/usr/local/youtrack/temp/ 
     links:
       - postgres
     ports:
