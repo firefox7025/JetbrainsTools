@@ -20,6 +20,13 @@ services:
       - 8111:8111
     links:
       - postgres
+  teamcity_agent:
+    image: jetbrains/teamcity-agent
+    environment:
+      - SERVER_URL=teamcity:8111
+      - AGENT_NAME="builder"
+    links:
+      - youtrack
   hub:
     build: hub/
     ports:
