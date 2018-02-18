@@ -3,10 +3,10 @@ services:
   youtrack:
     build: youtrack/
     volumes:
-      - /var/lib/youtrack
-      - /var/log/youtrack
-      - /usr/local/youtrack/conf
-      - /tmp
+      - /usr/local/youtrack/data/
+      - /usr/local/youtrack/backups/ 
+      - /usr/local/youtrack/logs/ 
+      - /usr/local/youtrack/temp/ 
     links:
       - postgres
     ports:
@@ -45,9 +45,9 @@ services:
       - 8113:8080
     volumes:
       - /opt/upsource/data
-      - /opt/upsource/conf
       - /opt/upsource/logs
       - /opt/upsource/backups
+      - /opt/upsource/temp/ 
     links:
       - hub
   postgres:
