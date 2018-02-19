@@ -22,11 +22,15 @@ services:
       - postgres
   teamcity_agent:
     image: jetbrains/teamcity-agent
+    privileged: true
     environment:
       - SERVER_URL=teamcity:8111
       - AGENT_NAME="builder"
+      - DOCKER_IN_DOCKER=start
     links:
       - youtrack
+    volumes:
+      - docker_volumes:/var/lib/docker
   hub:
     build: hub/
     ports:
