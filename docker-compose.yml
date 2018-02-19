@@ -30,7 +30,7 @@ services:
     links:
       - youtrack
     volumes:
-      - docker_volumes:/var/lib/docker
+      - /opt/docker/volumes:/var/lib/docker
   hub:
     build: hub/
     ports:
