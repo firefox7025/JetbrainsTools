@@ -27,6 +27,8 @@ RUN \
     chown -R youtrack:youtrack /usr/local/youtrack && \
     chmod -R u+rwxX /usr/local/youtrack/internal/java/linux-x64
 
+RUN chown -R youtrack:youtrack /usr/local/youtrack/data/ &&  chown -R youtrack:youtrack /usr/local/youtrack/backups/ && chown -R youtrack:youtrack /usr/local/youtrack/logs && chown -R youtrack:youtrack /usr/local/youtrack/temp
+
 USER youtrack
 ENV HOME=/var/lib/youtrack
 EXPOSE 8080
