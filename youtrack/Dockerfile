@@ -32,7 +32,7 @@ RUN mkdir -p /usr/local/youtrack/backups/ && chown -R youtrack:youtrack /usr/loc
 RUN mkdir -p /usr/local/youtrack/logs/ && chown -R youtrack:youtrack /usr/local/youtrack/logs && chmod -r 777 /usr/local/youtrack/logs/
 RUN mkdir -p /usr/local/youtrack/temp/ && chown -R youtrack:youtrack /usr/local/youtrack/temp && chmod -r 777 /usr/local/youtrack/temp/
 
-USER youtrack
+
 ENV HOME=/var/lib/youtrack
 EXPOSE 8080
 ENTRYPOINT ["/entry-point.sh"]
