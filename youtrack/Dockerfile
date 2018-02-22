@@ -27,7 +27,12 @@ RUN \
     chown -R youtrack:youtrack /usr/local/youtrack && \
     chmod -R u+rwxX /usr/local/youtrack/internal/java/linux-x64
 
-USER youtrack
+RUN mkdir -p /usr/local/youtrack/data/ && chown -R youtrack:youtrack /usr/local/youtrack/data/ && chmod -R 777 /usr/local/youtrack/data/
+RUN mkdir -p /usr/local/youtrack/backups/ && chown -R youtrack:youtrack /usr/local/youtrack/backups/ && chmod -R 777 /usr/local/youtrack/backups/ 
+RUN mkdir -p /usr/local/youtrack/logs/ && chown -R youtrack:youtrack /usr/local/youtrack/logs && chmod -R 777 /usr/local/youtrack/logs/
+RUN mkdir -p /usr/local/youtrack/temp/ && chown -R youtrack:youtrack /usr/local/youtrack/temp && chmod -R 777  /usr/local/youtrack/temp/
+
+
 ENV HOME=/var/lib/youtrack
 EXPOSE 8080
 ENTRYPOINT ["/entry-point.sh"]

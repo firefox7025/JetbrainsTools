@@ -3,10 +3,10 @@ services:
   youtrack:
     build: youtrack/
     volumes:
-      - YouTrackLib:/var/lib/youtrack
-      - YouTrackLog:/var/log/youtrack
-      - YouTrackLocal:/usr/local/youtrack/conf
-      - YouTrackTmp:/tmp
+      - /opt/youtrack/data/:/usr/local/youtrack/data/
+      - /opt/youtrack/backups/:/usr/local/youtrack/backups/ 
+      - /opt/youtrack/logs/:/usr/local/youtrack/logs/ 
+      - /opt/youtrack/temp/:/usr/local/youtrack/temp/ 
     links:
       - postgres
     ports:
@@ -14,12 +14,23 @@ services:
   teamcity:
     build: teamcity/
     volumes:
-      - TeamCityDataDir:/data/teamcity_server/datadir
-      - TeamCityLogsDir:/opt/teamcity/logs
+      - /data/teamcity_server/datadir
+      - /opt/teamcity/logs
     ports:
       - 8111:8111
     links:
       - postgres
+  teamcity_agent:
+    image: jetbrains/teamcity-agent
+    privileged: true
+    environment:
+      - SERVER_URL=teamcity:8111
+      - AGENT_NAME="builder"
+      - DOCKER_IN_DOCKER=start
+    links:
+      - youtrack
+    volumes:
+      - /opt/docker/volumes:/var/lib/docker
   hub:
     build: hub/
     ports:
@@ -28,55 +39,22 @@ services:
       - teamcity
       - youtrack
     volumes:
-      - HubDataDir:/opt/hub/hub-ring-bundle-2017.3.6757/data/
-      - HubBackupDir:/opt/hub/hub-ring-bundle-2017.3.6757/backups/
-      - HubLogsLocation:/opt/hub/hub-ring-bundle-2017.3.6757/logs/
-      - HubTempLocation:/opt/hub/hub-ring-bundle-2017.3.6757/temp/
+      - /opt/hub/hub-ring-bundle-2017.3.6757/data/
+      - /opt/hub/hub-ring-bundle-2017.3.6757/backups/
+      - /opt/hub/hub-ring-bundle-2017.3.6757/logs/
+      - /opt/hub/hub-ring-bundle-2017.3.6757/temp/
   upsource:
     image: jetbrains/upsource:2017.2.2197
     ports:
       - 8113:8080
     volumes:
-      - upsourceData:/opt/upsource/data
-      - upsourceconf:/opt/upsource/conf
-      - upsourceLogs:/opt/upsource/logs
-      - upsourceBackups:/opt/upsource/backups
+      - /opt/upsource/data
+      - /opt/upsource/logs
+      - /opt/upsource/backups
+      - /opt/upsource/temp/ 
     links:
       - hub
   postgres:
     image: postgres:10-alpine
     volumes:
-      - pgdata:/var/lib/postgresql/data
-
-volumes:
-  upsourceData:
-    external: true
-  upsourceconf:
-    external: true
-  upsourceLogs:
-    external: true
-  upsourceBackups:
-    external: true
-  HubDataDir:
-    external: true
-  HubBackupDir:
-    external: true
-  HubLogsLocation:
-    external: true
-  HubTempLocation:
-    external: true
-  TeamCityDataDir:
-    external: true
-  TeamCityLogsDir:
-    external: true
-  pgdata:
-    external: true
-  YouTrackLib:
-    external: true
-  YouTrackLog:
-    external: true
-  YouTrackLocal:
-    external: true
-  YouTrackTmp:
-    external: true
-  
+      - /var/lib/postgresql/data
